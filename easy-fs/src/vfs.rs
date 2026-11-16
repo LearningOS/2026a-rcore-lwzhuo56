@@ -271,7 +271,7 @@ impl Inode {
                     DIRENT_SZ,
                 );
                 if dirent.inode_id() == target_ino {
-                    root_inode.size = ((file_count - 1) * DIRENT_SZ) as u32;
+                    let new_size = (file_count - 1) * DIRENT_SZ;
                     for next in index..file_count - 1 {
                         assert_eq!(
                             root_inode.read_at(
@@ -287,6 +287,7 @@ impl Inode {
                             &self.block_device,
                         );
                     }
+                    root_inode.size = new_size as u32;
                     break;
                 }
             }
