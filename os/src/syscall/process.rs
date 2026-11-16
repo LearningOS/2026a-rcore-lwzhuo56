@@ -56,6 +56,9 @@ pub fn sys_trace(trace_request: usize, id: usize, data: usize) -> isize {
     trace!("kernel: sys_trace");
     match trace_request {
         0 => {
+            if id >= (1usize << 38) {
+                return -1;
+            }
             let token = current_user_token();
             let page_table = crate::mm::PageTable::from_token(token);
             let addr = crate::mm::VirtAddr::from(id);
@@ -67,6 +70,9 @@ pub fn sys_trace(trace_request: usize, id: usize, data: usize) -> isize {
             }
         }
         1 => {
+            if id >= (1usize << 38) {
+                return -1;
+            }
             let token = current_user_token();
             let page_table = crate::mm::PageTable::from_token(token);
             let addr = crate::mm::VirtAddr::from(id);
